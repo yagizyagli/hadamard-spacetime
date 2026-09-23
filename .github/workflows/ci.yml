@@ -1,0 +1,55 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_and_test:
+    name: Build and Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Install Stable Rust Toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
+
+    - name: Cache Cargo Dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    - name: Verify Core Compilation (Standard Features)
+      run: cargo check --verbose
+
+    - name: Verify Quantum Compilations (All Features Enacted)
+      run: cargo check --features quantum --verbose
+
+    - name: Run Core Workspace Tests
+      run: cargo test --all-targets --verbose
+
+    - name: Execute Quantum Core Test Envelopes
+      run: cargo test --features quantum --all-targets --verbose
+
+    - name: Enforce Code Style Standards (rustfmt)
+      run: cargo fmt --check
+
+    - name: Lint Code Base via Enterprise Rules (clippy)
+      run: cargo clippy --all-targets --features quantum -- -D warnings
