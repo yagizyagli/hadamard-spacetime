@@ -52,11 +52,11 @@ pub fn compute_lense_thirring_drift(
         return Err(SpacetimeError::SchwarzschildRadiusBreach);
     }
 
-    let c_cube = SPEED_OF_LIGHT * SPEED_OF_LIGHT * SPEED_OF_LIGHT;
     let r_cube = radial_distance_meters * radial_distance_meters * radial_distance_meters;
+    let c_sq = SPEED_OF_LIGHT * SPEED_OF_LIGHT;
 
     // Lense-Thirring precession rate omega = (2 * G * J) / (c^2 * r^3)
-    let precession_rate = (2.0 * GRAVITATIONAL_CONSTANT * angular_momentum_j) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT * r_cube);
+    let precession_rate = (2.0 * GRAVITATIONAL_CONSTANT * angular_momentum_j) / (c_sq * r_cube);
     
     // Time displacement contribution adjusted by orbital inclination metrics
     let accumulated_drift = precession_rate * inclination_rad.cos() * delta_time_seconds;
