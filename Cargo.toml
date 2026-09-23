@@ -1,0 +1,18 @@
+[package]
+name = "hadamard-spacetime"
+version = "0.1.0"
+edition = "2021"
+authors = ["Yağız Yağlı <@yagizyagli>"]
+description = "An enterprise-grade relativistic spacetime correction and quantum phase synchronization engine for deep-space navigation networks."
+license = "MIT"
+readme = "README.md"
+categories = ["aerospace", "science", "cryptography"]
+keywords = ["spacetime", "quantum", "relativity", "telemetry", "astrodynamics"]
+
+[features]
+default = ["std"]
+std = []
+quantum = [] # Toggles quantum phase and clock drift modules
+
+[dependencies]
+num-traits = { version = "0.2", default-features = false }
