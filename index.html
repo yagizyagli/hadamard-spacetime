@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hadamard-spacetime — Relativistic Deep-Space Live Telemetry Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #05050a;
+            --panel-bg: #0d0e15;
+            --border-color: #1f2335;
+            --text-main: #c0caf5;
+            --accent-blue: #7aa2f7;
+            --accent-green: #73daca;
+            --accent-orange: #ff9e64;
+            --accent-red: #f7768e;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--accent-blue);
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #565f89;
+            margin-top: 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .metric-value {
+            font-weight: bold;
+        }
+
+        .blue-txt { color: var(--accent-blue); }
+        .green-txt { color: var(--accent-green); }
+        .orange-txt { color: var(--accent-orange); }
+        .red-txt { color: var(--accent-red); }
+
+        .progress-bar {
+            background-color: #16161e;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .console {
+            background-color: #16161e;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #9ece6a;
+            border-radius: 4px;
+        }
+
+        .console-line {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>HADAMARD-SPACETIME Engine Dashboard</h1>
+        <div class="subtitle">Live Real-Time Relativistic & Quantum Telemetry Link Verification Simulation Engine — Node: LUNANET-ORBITER-8842</div>
+    </header>
+
+    <div class="grid">
+        <!-- Panel 1: Orbital Trajectory Mechanics -->
+        <div class="panel">
+            <div class="panel-title">1. Orbital Tracking Vectors</div>
+            <div class="metric">
+                <span>Target Anchor Node:</span>
+                <span class="metric-value orange-txt">LUNAR_CORE_WELL</span>
+            </div>
+            <div class="metric">
+                <span>Orbital Rate Profile:</span>
+                <span class="metric-value">1,633.00 m/s</span>
+            </div>
+            <div class="metric">
+                <span>Volumetric Distance:</span>
+                <span class="metric-value">1,837.40 km</span>
+            </div>
+            <div class="metric">
+                <span>Monotonic Mission Clock:</span>
+                <span id="mission-clock" class="metric-value blue-txt">0000000000</span>
+            </div>
+        </div>
+
+        <!-- Panel 2: Relativistic Spacetime Drift -->
+        <div class="panel">
+            <div class="panel-title">2. Relativistic Core Engine</div>
+            <div class="metric">
+                <span>Kinematic Lorentz Skew:</span>
+                <span id="kinematic-skew" class="metric-value green-txt">0.000000000000000e+0</span>
+            </div>
+            <div class="progress-bar">
+                <div id="kinematic-progress" class="progress-fill" style="background-color: var(--accent-green);"></div>
+            </div>
+            <div style="margin-top: 15px;" class="metric">
+                <span>Gravitational Dilation:</span>
+                <span id="gravitational-skew" class="metric-value red-txt">0.000000000000000e+0</span>
+            </div>
+            <div class="progress-bar">
+                <div id="gravitational-progress" class="progress-fill" style="background-color: var(--accent-red);"></div>
+            </div>
+        </div>
+
+        <!-- Panel 3: Interlinked Quantum Subsystems -->
+        <div class="panel">
+            <div class="panel-title">3. Quantum Subsystem Metrics</div>
+            <div class="metric">
+                <span>Lattice Clock Calibration:</span>
+                <span id="clock-skew" class="metric-value orange-txt">0.0000 fs</span>
+            </div>
+            <div class="metric">
+                <span>Wigner Polarization Align:</span>
+                <span id="wigner-align" class="metric-value blue-txt">0.000000 Rad</span>
+            </div>
+            <div class="metric">
+                <span>Quantum Link Security:</span>
+                <span class="metric-value green-txt">OPTICAL_LINK_SECURE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel 4: Serialized Network Payload Output -->
+    <div class="panel" style="margin-bottom: 20px;">
+        <div class="panel-title">4. Live Compiled 28-Byte Telemetry Frame Sequence (Network Byte Order)</div>
+        <div id="hex-frame" style="font-size: 16px; font-weight: bold; letter-spacing: 2px; text-align: center; padding: 10px; background-color: #16161e; border: 1px solid var(--border-color); border-radius: 4px;" class="green-txt">
+            00 00 22 8A 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+        </div>
+    </div>
+
+    <!-- Panel 5: Real-Time Event Log Console -->
+    <div class="panel">
+        <div class="panel-title">5. Ground Station Core Telemetry Feed</div>
+        <div id="console-feed" class="console">
+            <div class="console-line">[SYSTEM] Verification engine deployment initialization sequence launched...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- High-Precision JavaScript Mirror of the Rust Engine Calculus ---
+    const SPEED_OF_LIGHT = 299792458.0;
+    const GRAVITATIONAL_CONSTANT = 6.67430e-11;
+    const MOON_MASS = 7.342e22;
+    
+    let missionNanos = 0;
+    let totalKinematicSkew = 0.0;
+    let totalGravitationalSkew = 0.0;
+
+    // Helper functions for mock simulation loops matching Rust algorithms
+    function stepSimulation() {
+        missionNanos += 1000000000; // +1 Second in nanoseconds
+        
+        // A. Special Relativity: Kinematic Lorentz Dilation (v = 1633 m/s)
+        const v = 1633.0;
+        const betaSq = (v * v) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT);
+        const gamma = 1.0 / Math.sqrt(1.0 - betaSq);
+        const kinematicSkew = 1.0 * (gamma - 1.0);
+        totalKinematicSkew += kinematicSkew;
+
+        // B. General Relativity: Gravitational Schwarzschild Dilation (r = MOON_RADIUS + 100km)
+        const r = 1737400.0 + 100000.0;
+        const rS = (2.0 * GRAVITATIONAL_CONSTANT * MOON_MASS) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT);
+        const metricFactor = Math.sqrt(1.0 - (rS / r));
+        const gravitationalSkew = 1.0 * (1.0 - metricFactor);
+        totalGravitationalSkew += gravitationalSkew;
+
+        // C. Quantum Optics Calibration: Wigner Rotation and Lattice drift
+        const clockCorrection = 12.5 * (1.0 + (2.4e-10 * 1.0e-18));
+        const wignerAlign = 0.785398 * Math.sqrt(1.0 - betaSq);
+
+        // Update Dashboard DOM Text Fields
+        document.getElementById("mission-clock").innerText = missionNanos;
+        document.getElementById("kinematic-skew").innerText = totalKinematicSkew.toExponential(15);
+        document.getElementById("gravitational-skew").innerText = totalGravitationalSkew.toExponential(15);
+        document.getElementById("clock-skew").innerText = clockCorrection.toFixed(4) + " fs";
+        document.getElementById("wigner-align").innerText = wignerAlign.toFixed(6) + " Rad";
+
+        // Dynamic Graphical Progress Bars
+        document.getElementById("kinematic-progress").style.width = Math.min((totalKinematicSkew * 1e14), 100) + "%";
+        document.getElementById("gravitational-progress").style.width = Math.min((totalGravitationalSkew * 1e12), 100) + "%";
+
+        // D. Compile Mock Big-Endian 28-Byte Hex Telemetry Array Output
+        let hexFrame = "00 00 22 8A "; // Satellite ID 8842 in hex fields
+        hexFrame += Math.floor(missionNanos / 1e9).toString(16).toUpperCase().padStart(16, '0').match(/.{1,2}/g).join(' ') + " ";
+        hexFrame += "3E 3A " + Math.floor(totalKinematicSkew * 1e16).toString(16).toUpperCase().padStart(12, '0').match(/.{1,2}/g).join(' ');
+        
+        document.getElementById("hex-frame").innerText = hexFrame.substring(0, 83);
+
+        // Update Real-Time Event Terminal Log Log lines
+        const consoleFeed = document.getElementById("console-feed");
+        const logLine = document.createElement("div");
+        logLine.className = "console-line";
+        logLine.innerText = `[TELEMETRY RECORD] Timestamp: ${missionNanos} ns | Sync Package Frame Compiled successfully.`;
+        consoleFeed.appendChild(logLine);
+        consoleFeed.scrollTop = consoleFeed.scrollHeight;
+    }
+
+    // Trigger simulation sequence loop at steady 1 second execution frames
+    setInterval(stepSimulation, 1000);
+</script>
+</body>
+</html>
