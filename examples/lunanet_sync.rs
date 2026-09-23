@@ -7,6 +7,7 @@ use hadamard_spacetime::core::kinematic::compute_lorentz_time_dilation;
 use hadamard_spacetime::quantum::clock::evaluate_quantum_clock_skew;
 use hadamard_spacetime::quantum::phase_correction::calibrate_wigner_phase_rotation;
 use hadamard_spacetime::telemetry::sync_packet::RelativisticSyncPacket;
+use core::f64::consts::FRAC_PI_4;
 
 fn main() {
     println!("======================================================================");
@@ -53,7 +54,7 @@ fn main() {
         let calibrated_clock_skew = evaluate_quantum_clock_skew(mock_gradient_tensor, raw_atomic_drift_fs)
             .unwrap_or(raw_atomic_drift_fs);
 
-        let raw_photon_phase_rad = 0.785398; // 45-degree raw polarization state injected
+        let raw_photon_phase_rad = FRAC_PI_4; // 45-degree raw polarization state injected natively via core constants
         let compensated_wigner_phase = calibrate_wigner_phase_rotation(raw_photon_phase_rad, lunar_orbital_velocity_ms)
             .unwrap_or(raw_photon_phase_rad);
 
