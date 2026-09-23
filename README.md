@@ -64,7 +64,7 @@ Incorporate the engine into your embedded flight computing environment by append
 
 ```toml
 [dependencies]
-hadamard-spacetime = { version = "0.1.0", default-features = false, features = ["std", "quantum"] }
+hadamard-spacetime = { git = "https://github.com/yagizyagli/hadamard-spacetime, features = ["quantum"] }
 ```
 
 ### Running Local High-Fidelity Simulations
