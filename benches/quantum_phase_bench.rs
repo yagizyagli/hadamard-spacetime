@@ -4,6 +4,7 @@ use hadamard_spacetime::quantum::clock::evaluate_quantum_clock_skew;
 use hadamard_spacetime::quantum::phase_correction::{
     calibrate_wigner_phase_rotation, compute_gravitational_phase_shift,
 };
+use core::f64::consts::FRAC_PI_4;
 
 /// High-iteration benchmarking harness profiling execution throughput of quantum-space mechanics.
 fn main() {
@@ -27,7 +28,7 @@ fn main() {
 
     // 2. Profile Wigner Relativistic Spin/Phase Polarization Correction
     let start_wigner = 10_000_000;
-    let baseline_polarization_rad = 0.785398; // Nominal 45-degree photon polarization angle
+    let baseline_polarization_rad = FRAC_PI_4; // Native 45-degree photon polarization angle constant
     let orbital_velocity_ms = 7500.0;          // Spacecraft orbital rate profile (m/s)
     let mut wigner_accumulator = 0.0;
 
