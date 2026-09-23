@@ -23,3 +23,15 @@ pub const MARS_MASS: f64 = 6.39e23;
 
 /// Mean radius of Planet Mars (meters).
 pub const MARS_RADIUS: f64 = 3_389_500.0;
+
+/// Mass of the Sun (kilograms) - Crucial for heliocentric deep-space transfer phases.
+pub const SUN_MASS: f64 = 1.989e30;
+
+/// Nominal solar equatorial radius (meters).
+pub const SUN_RADIUS: f64 = 6_96_342_000.0;
+
+/// Mass of Planet Jupiter (kilograms) - Required for gravitational perturbations near Mars.
+pub const JUPITER_MASS: f64 = 1.898e27;
+
+/// Mean equatorial radius of Planet Jupiter (meters).
+pub const JUPITER_RADIUS: f64 = 71_492_000.0;
