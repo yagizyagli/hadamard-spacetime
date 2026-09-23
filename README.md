@@ -1,6 +1,6 @@
 # Hadamard-Spacetime (hadamard-spacetime)
 
-An enterprise-grade relativistic spacetime correction and quantum phase synchronization engine designed for deep-space telemetry verification, interplanetary navigation networks (e.g., NASA LunaNet, ESA Moonlight), and real-time orbital atomic clock drift compensation.
+An enterprise-grade relativistic spacetime correction and quantum phase synchronization engine designed for deep-space telemetry verification, interplanetary navigation networks (NASA LunaNet, ESA Moonlight), and real-time orbital atomic clock drift compensation.
 
 ---
 
