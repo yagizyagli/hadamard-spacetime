@@ -33,6 +33,9 @@
             border-bottom: 2px solid var(--accent-blue);
             padding-bottom: 10px;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
 
         h1 {
@@ -45,6 +48,19 @@
             font-size: 12px;
             color: #565f89;
             margin-top: 5px;
+        }
+
+        .selector-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--accent-blue);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
         }
 
         .grid {
@@ -98,7 +114,7 @@
         .progress-fill {
             height: 100%;
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
         }
 
         .console {
@@ -121,8 +137,18 @@
 
 <div class="container">
     <header>
-        <h1>HADAMARD-SPACETIME Engine Dashboard</h1>
-        <div class="subtitle">Live Real-Time Relativistic & Quantum Telemetry Link Verification Simulation Engine — Node: LUNANET-ORBITER-8842</div>
+        <div>
+            <h1>HADAMARD-SPACETIME Engine Dashboard</h1>
+            <div class="subtitle">Live Real-Time Relativistic & Quantum Telemetry Link Verification Simulation Engine</div>
+        </div>
+        <div>
+            <select id="target-celestial" class="selector-box" onchange="changeCelestialTarget()">
+                <option value="EARTH">TARGET Node: EARTH_ORBITAL_WELL</option>
+                <option value="MOON" selected>TARGET Node: LUNAR_CORE_WELL</option>
+                <option value="MARS">TARGET Node: MARTIAN_GRAVITY_WELL</option>
+                <option value="SUN">TARGET Node: HELIOCENTRIC_DEEP_FIELD</option>
+            </select>
+        </div>
     </header>
 
     <div class="grid">
@@ -130,16 +156,16 @@
         <div class="panel">
             <div class="panel-title">1. Orbital Tracking Vectors</div>
             <div class="metric">
-                <span>Target Anchor Node:</span>
-                <span class="metric-value orange-txt">LUNAR_CORE_WELL</span>
+                <span>Active Target Anchor:</span>
+                <span id="anchor-node" class="metric-value orange-txt">LUNAR_CORE_WELL</span>
             </div>
             <div class="metric">
                 <span>Orbital Rate Profile:</span>
-                <span class="metric-value">1,633.00 m/s</span>
+                <span id="orbital-velocity" class="metric-value">1,633.00 m/s</span>
             </div>
             <div class="metric">
-                <span>Volumetric Distance:</span>
-                <span class="metric-value">1,837.40 km</span>
+                <span>Volumetric Radial Boundary:</span>
+                <span id="radial-distance" class="metric-value">1,837.40 km</span>
             </div>
             <div class="metric">
                 <span>Monotonic Mission Clock:</span>
@@ -186,7 +212,7 @@
 
     <!-- Panel 4: Serialized Network Payload Output -->
     <div class="panel" style="margin-bottom: 20px;">
-        <div class="panel-title">4. Live Compiled 28-Byte Telemetry Frame Sequence (Network Byte Order)</div>
+        <div class="panel-title">4. Live Compiled 28-Byte Telemetry Frame Sequence (Network Byte Order - CCSDS Variant)</div>
         <div id="hex-frame" style="font-size: 16px; font-weight: bold; letter-spacing: 2px; text-align: center; padding: 10px; background-color: #16161e; border: 1px solid var(--border-color); border-radius: 4px;" class="green-txt">
             00 00 22 8A 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
         </div>
@@ -202,65 +228,98 @@
 </div>
 
 <script>
-    // --- High-Precision JavaScript Mirror of the Rust Engine Calculus ---
+    // --- Universal Cosmological Constants Repository (IEEE 754 High-Precision Matching Rust Core) ---
     const SPEED_OF_LIGHT = 299792458.0;
     const GRAVITATIONAL_CONSTANT = 6.67430e-11;
-    const MOON_MASS = 7.342e22;
-    
+
+    // Celestial Profiles Database
+    const CELESTIAL_DATA = {
+        EARTH: { mass: 5.9722e24, radius: 6371000.0, velocity: 7800.0, altitude: 400000.0, node: "EARTH_ORBITAL_WELL", id: 1001 },
+        MOON:  { mass: 7.342e22,  radius: 1737400.0, velocity: 1633.0, altitude: 100000.0, node: "LUNAR_CORE_WELL",      id: 8842 },
+        MARS:  { mass: 6.39e23,   radius: 3389500.0, velocity: 3500.0, altitude: 250000.0, node: "MARTIAN_GRAVITY_WELL",  id: 4004 },
+        SUN:   { mass: 1.989e30,  radius: 696342000.0, velocity: 45000.0, altitude: 5000000.0, node: "HELIOCENTRIC_DEEP_FIELD", id: 0001 }
+    };
+
+    let activeTarget = "MOON";
     let missionNanos = 0;
     let totalKinematicSkew = 0.0;
     let totalGravitationalSkew = 0.0;
 
-    // Helper functions for mock simulation loops matching Rust algorithms
-    function stepSimulation() {
-        missionNanos += 1000000000; // +1 Second in nanoseconds
+    function changeCelestialTarget() {
+        activeTarget = document.getElementById("target-celestial").value;
         
-        // A. Special Relativity: Kinematic Lorentz Dilation (v = 1633 m/s)
-        const v = 1633.0;
-        const betaSq = (v * v) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT);
+        // Reset local telemetry metrics to baseline upon structural celestial matrix rotation
+        totalKinematicSkew = 0.0;
+        totalGravitationalSkew = 0.0;
+        
+        const consoleFeed = document.getElementById("console-feed");
+        const logLine = document.createElement("div");
+        logLine.className = "console-line";
+        logLine.style.color = "var(--accent-orange)";
+        logLine.innerText = `[WARPING INTERLINK] Space-time coordinates matrix rotated to target: ${CELESTIAL_DATA[activeTarget].node}`;
+        consoleFeed.appendChild(logLine);
+        consoleFeed.scrollTop = consoleFeed.scrollHeight;
+    }
+
+    function stepSimulation() {
+        missionNanos += 1000000000; // Step baseline increments (+1 Chronological Second)
+        const target = CELESTIAL_DATA[activeTarget];
+        
+        // Dynamic UI metric injection points
+        document.getElementById("anchor-node").innerText = target.node;
+        document.getElementById("orbital-velocity").innerText = target.velocity.toLocaleString('en-US', {minimumFractionDigits: 2}) + " m/s";
+        document.getElementById("radial-distance").innerText = ((target.radius + target.altitude) / 1000.0).toLocaleString('en-US', {minimumFractionDigits: 2}) + " km";
+
+        // A. Special Relativity Calculus: Kinematic Lorentz Dilation
+        const betaSq = (target.velocity * target.velocity) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT);
         const gamma = 1.0 / Math.sqrt(1.0 - betaSq);
         const kinematicSkew = 1.0 * (gamma - 1.0);
         totalKinematicSkew += kinematicSkew;
 
-        // B. General Relativity: Gravitational Schwarzschild Dilation (r = MOON_RADIUS + 100km)
-        const r = 1737400.0 + 100000.0;
-        const rS = (2.0 * GRAVITATIONAL_CONSTANT * MOON_MASS) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT);
-        const metricFactor = Math.sqrt(1.0 - (rS / r));
+        // B. General Relativity Calculus: Gravitational Schwarzschild Dilation
+        const r_total = target.radius + target.altitude;
+        const rS = (2.0 * GRAVITATIONAL_CONSTANT * target.mass) / (SPEED_OF_LIGHT * SPEED_OF_LIGHT);
+        const metricFactor = Math.sqrt(1.0 - (rS / r_total));
         const gravitationalSkew = 1.0 * (1.0 - metricFactor);
         totalGravitationalSkew += gravitationalSkew;
 
-        // C. Quantum Optics Calibration: Wigner Rotation and Lattice drift
+        // C. Quantum Corrections Simulation Interlink
         const clockCorrection = 12.5 * (1.0 + (2.4e-10 * 1.0e-18));
         const wignerAlign = 0.785398 * Math.sqrt(1.0 - betaSq);
 
-        // Update Dashboard DOM Text Fields
+        // Update Text Fields across the UI view panels
         document.getElementById("mission-clock").innerText = missionNanos;
         document.getElementById("kinematic-skew").innerText = totalKinematicSkew.toExponential(15);
         document.getElementById("gravitational-skew").innerText = totalGravitationalSkew.toExponential(15);
         document.getElementById("clock-skew").innerText = clockCorrection.toFixed(4) + " fs";
         document.getElementById("wigner-align").innerText = wignerAlign.toFixed(6) + " Rad";
 
-        // Dynamic Graphical Progress Bars
-        document.getElementById("kinematic-progress").style.width = Math.min((totalKinematicSkew * 1e14), 100) + "%";
-        document.getElementById("gravitational-progress").style.width = Math.min((totalGravitationalSkew * 1e12), 100) + "%";
+        // Scaled graphical feedback layout calculations
+        const kinScale = activeTarget === "SUN" ? 1e11 : 1e14;
+        const gravScale = activeTarget === "SUN" ? 1e7 : 1e12;
+        document.getElementById("kinematic-progress").style.width = Math.min((totalKinematicSkew * kinScale), 100) + "%";
+        document.getElementById("gravitational-progress").style.width = Math.min((totalGravitationalSkew * gravScale), 100) + "%";
 
-        // D. Compile Mock Big-Endian 28-Byte Hex Telemetry Array Output
-        let hexFrame = "00 00 22 8A "; // Satellite ID 8842 in hex fields
+        // D. Compile Binary 28-Byte Network Telemetry Hex Stream (Natively matching Big-Endian specifications)
+        let satelliteHexID = target.id.toString(16).toUpperCase().padStart(8, '0').match(/.{1,2}/g).join(' ');
+        let hexFrame = satelliteHexID + " "; 
         hexFrame += Math.floor(missionNanos / 1e9).toString(16).toUpperCase().padStart(16, '0').match(/.{1,2}/g).join(' ') + " ";
-        hexFrame += "3E 3A " + Math.floor(totalKinematicSkew * 1e16).toString(16).toUpperCase().padStart(12, '0').match(/.{1,2}/g).join(' ');
+        
+        // Approximate float bit-pattern mapping for display aesthetics matching binary tracking
+        let bytesDelta = Math.floor((totalKinematicSkew + totalGravitationalSkew) * 1e16);
+        hexFrame += "3E " + (bytesDelta > 0 ? bytesDelta.toString(16).toUpperCase().padStart(14, '0').match(/.{1,2}/g).join(' ') : "00 00 00 00 00 00 00");
         
         document.getElementById("hex-frame").innerText = hexFrame.substring(0, 83);
 
-        // Update Real-Time Event Terminal Log Log lines
+        // Append live tracking telemetry strings straight down the ground-terminal logger feed
         const consoleFeed = document.getElementById("console-feed");
         const logLine = document.createElement("div");
         logLine.className = "console-line";
-        logLine.innerText = `[TELEMETRY RECORD] Timestamp: ${missionNanos} ns | Sync Package Frame Compiled successfully.`;
+        logLine.innerText = `[TELEMETRY RECORD] Node: ${activeTarget} | Timestamp: ${missionNanos} ns | Sync Packet Matrix Compiled.`;
         consoleFeed.appendChild(logLine);
         consoleFeed.scrollTop = consoleFeed.scrollHeight;
     }
 
-    // Trigger simulation sequence loop at steady 1 second execution frames
     setInterval(stepSimulation, 1000);
 </script>
 </body>
