@@ -42,10 +42,7 @@ jobs:
     - name: Verify Quantum Compilations (All Features Enacted)
       run: cargo check --features quantum --verbose
 
-    - name: Run Core Workspace Tests
-      run: cargo test --all-targets --verbose
-
-    - name: Execute Quantum Core Test Envelopes
+    - name: Run Core Workspace Tests with Quantum Enabled
       run: cargo test --features quantum --all-targets --verbose
 
     - name: Enforce Code Style Standards (rustfmt)
