@@ -5,6 +5,7 @@ use hadamard_spacetime::constants::{EARTH_MASS, EARTH_RADIUS, SPEED_OF_LIGHT};
 use hadamard_spacetime::quantum::phase_correction::{
     calibrate_wigner_phase_rotation, compute_gravitational_phase_shift,
 };
+use core::f64::consts::FRAC_PI_4;
 
 fn main() {
     println!("======================================================================");
@@ -20,7 +21,7 @@ fn main() {
     
     // QKD standard carrier pulse: 1550nm wavelength equivalent to 193.1 Terahertz telecom laser band
     let qkd_carrier_frequency_hz = 193.1e12; 
-    let initial_polarization_rad = 0.785398;      // Initial 45-degree BB84 protocol photon polarization
+    let initial_polarization_rad = FRAC_PI_4;     // Native 45-degree BB84 protocol photon polarization constant
 
     println!("[INFO] Deploying Node: Vector Space Interface [{}]", satellite_name);
     println!("[INFO] Optical Channel Frequency: {} THz (1550nm Range)", qkd_carrier_frequency_hz / 1e12);
@@ -48,7 +49,6 @@ fn main() {
         }
 
         // B. Calculate General Relativistic Shift: Gravitational Wavepacket Redshift Distortion
-        // Fotonlar kütleçekim kuyusundan çıkarken (Uydudan Yere) veya girerken faz kaymasına uğrar
         match compute_gravitational_phase_shift(
             EARTH_MASS,
             satellite_orbit_radius, // Source: Satellite at 500km altitude
@@ -59,7 +59,6 @@ fn main() {
                 println!("  Gravitational Redshift Phase : {:+.10e} Rad / ns window", grav_phase_shift);
                 
                 // C. System Coherence Evaluation Metric
-                // If the total accumulated phase drift transcends quantum safety limits, trigger warnings
                 if grav_phase_shift.abs() > 1.0e-3 {
                     println!("  Channel Security Advisory    : WARNING - Phase Distortion Approaching Coherence Limits");
                 } else {
