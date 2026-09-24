@@ -32,7 +32,7 @@ hadamard-spacetime/
 │       └── ci.yml             # Automated multi-feature compilation, formatting, & clippy audits
 ├── Cargo.toml                 # Structural crate manifest & modular feature gating layouts
 ├── README.md                  # Comprehensive astrophysical & integration documentation
-├── index.html                 # Kök Dizin: Live GitHub Pages Mission Control simulation dashboard
+├── index.html                 # Root Directory: Live GitHub Pages Mission Control simulation dashboard
 ├── benches/
 │   ├── dilation_bench.rs      # 10M iteration stress testing for Special/General Relativity core
 │   └── quantum_phase_bench.rs # 10M iteration throughput testing for QKD and atomic lattice paths
